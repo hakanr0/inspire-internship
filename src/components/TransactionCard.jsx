@@ -12,7 +12,7 @@ export default function TransactionCard({ transaction }) {
   const dispatch = useDispatch();
 
   const handleShowTransactionDetails = () => {
-    dispatch(transactionsActions.handleSelectedTransaction(transaction));
+    dispatch(transactionsActions.updateForm(transaction));
     dispatch(transactionsActions.handleTransactionDetailsDialog());
   };
 
@@ -41,7 +41,13 @@ export default function TransactionCard({ transaction }) {
         <p className="text-sm text-gray-500">{transaction.category}</p>
       </div>
       <h1 className="text-2xl font-semibold">${transaction.amount}</h1>
-      <p className="text-sm font-semibold text-gray-500">{transaction.date}</p>
+      <p className="text-sm font-semibold text-gray-500">
+        {new Date(transaction.date).toLocaleString("en-US", {
+          month: "long",
+          day: "2-digit",
+          year: "numeric",
+        })}
+      </p>
     </div>
   );
 }

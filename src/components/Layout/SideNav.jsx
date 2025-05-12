@@ -17,7 +17,7 @@ export default function SideNav() {
 
   return (
     <nav className="flex flex-col gap-2 w-96 h-fit p-4 rounded-lg bg-[#def2fc] text-slate-900 max-lg:w-fit max-md:hidden">
-      {navItems.map((item, index) => (
+      {navItems?.map((item, index) => (
         <NavLink
           key={index}
           to={item.to}

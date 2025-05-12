@@ -29,7 +29,7 @@ export default function MenuDrawer({ open, toggle }) {
       }}
     >
       <nav className="flex flex-col gap-2 w-80 h-fit p-4 rounded-lg bg-[#def2fc] text-slate-900">
-        {navItems.map((item, index) => (
+        {navItems?.map((item, index) => (
           <NavLink
             key={index}
             to={item.to}

@@ -13,7 +13,7 @@ export const handleTransactionErrors = (transaction) => {
       field: "category",
       description: "Category is required.",
     });
-  if (transaction.amount.trim() === "")
+  if (transaction.amount === "")
     errors.push({
       type: "error",
       field: "amount",

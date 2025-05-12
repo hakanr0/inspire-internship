@@ -9,11 +9,15 @@ import AuthRoot from "./pages/AuthRoot";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
+// ERROR PAGE
+import ErrorPage from "./pages/ErrorPage";
+
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Root />,
+      errorElement: <ErrorPage />,
       children: [
         {
           index: true,

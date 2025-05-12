@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { transactionsActions } from "../store/transactions";
 
 export default function Home() {
-  const { transactions, selectedTransaction, isViewingDetails } = useSelector(
+  const { transactions, isViewingDetails } = useSelector(
     (state) => state.transactions
   );
   const dispatch = useDispatch();
@@ -18,7 +18,6 @@ export default function Home() {
     <>
       <TransactionDetailsDialog
         isOpen={isViewingDetails}
-        details={selectedTransaction}
         onClose={() =>
           dispatch(transactionsActions.handleTransactionDetailsDialog())
         }
@@ -28,9 +27,9 @@ export default function Home() {
         <h1 className="fleur-de-leah mb-4 text-[2.5rem] select-none max-md:text-4xl">
           Home
         </h1>
-        {transactions.length !== 0 ? (
+        {transactions?.length !== 0 ? (
           <div className="grid grid-cols-3 gap-4 max-xl:grid-cols-2 max-md:grid-cols-1">
-            {transactions.map((t) => (
+            {transactions?.map((t) => (
               <TransactionCard key={t.id} transaction={t} />
             ))}
           </div>

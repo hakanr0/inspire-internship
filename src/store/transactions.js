@@ -33,8 +33,14 @@ const transactionsSlice = createSlice({
         date: "2025-05-05",
       },
     ],
-    selectedTransaction: {},
     isViewingDetails: false,
+    form: {
+      id: 0,
+      title: "",
+      category: "",
+      amount: 0,
+      date: "",
+    },
   },
   reducers: {
     setTransactions(state, action) {
@@ -55,11 +61,21 @@ const transactionsSlice = createSlice({
         (t) => t.id !== action.payload
       );
     },
-    handleSelectedTransaction(state, action) {
-      state.selectedTransaction = action.payload;
-    },
     handleTransactionDetailsDialog(state) {
       state.isViewingDetails = !state.isViewingDetails;
+    },
+    updateForm(state, action) {
+      state.form = action.payload;
+    },
+    updateField(state, action) {
+      const { field, value } = action.payload;
+      state.form[field] = value;
+    },
+    clearForm(state) {
+      state.form.title = "";
+      state.form.category = "";
+      state.form.amount = 0;
+      state.form.date = "";
     },
   },
 });

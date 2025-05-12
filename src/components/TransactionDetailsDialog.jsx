@@ -1,22 +1,27 @@
+import { Dialog } from "@mui/material";
+
 import Button from "./UI/Button";
 import Input from "./UI/Input";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+
+// CUSTOM HOOKS
+import { useForm } from "../hooks/useForm";
+
+// ERROR HANDLER
+import { handleTransactionErrors } from "../util/errors";
 
 // ICONS
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
-import { handleTransactionErrors } from "../util/errors";
 
 export default function TransactionDetailsDialog({
   isOpen,
-  details,
   onClose,
   onUpdate,
 }) {
-  const dialogRef = useRef();
-  const formRef = useRef();
   const [responseMessages, setResponseMessages] = useState([]);
+  const { form, handleChange, resetForm } = useForm();
 
   const handleUpdate = (e) => {
     e.preventDefault();
@@ -29,30 +34,30 @@ export default function TransactionDetailsDialog({
       return;
     }
 
-    onUpdate({ id: details.id, ...obj });
-    dialogRef.current.close();
+    onUpdate(form);
+    resetForm();
+    onClose();
   };
 
-  useEffect(() => {
-    if (isOpen) dialogRef.current.showModal();
-    else dialogRef.current.close();
-  }, [isOpen]);
-
   return (
-    <dialog
-      ref={dialogRef}
-      className="w-[32rem] m-auto p-4 rounded-lg"
+    <Dialog
+      open={isOpen}
       onClose={() => {
         onClose();
-        formRef.current.reset();
+        resetForm();
         setResponseMessages([]);
       }}
+      slotProps={{
+        paper: {
+          sx: {
+            minWidth: "24rem",
+            padding: "16px",
+            borderRadius: "8px",
+          },
+        },
+      }}
     >
-      <form
-        ref={formRef}
-        className="flex flex-col gap-4"
-        onSubmit={handleUpdate}
-      >
+      <form className="flex flex-col gap-4" onSubmit={handleUpdate}>
         <div className="flex items-start justify-between">
           <h1 className="fleur-de-leah text-[2.5rem] select-none max-md:text-4xl">
             Details
@@ -60,7 +65,7 @@ export default function TransactionDetailsDialog({
           <Button
             btnAction="text-danger"
             type="button"
-            onClick={() => dialogRef.current.close()}
+            onClick={() => onClose()}
           >
             <CloseIcon fontSize="large" />
           </Button>
@@ -68,16 +73,20 @@ export default function TransactionDetailsDialog({
         <Input
           id="title"
           label="Title"
-          defaultValue={details.title}
-          invalid={responseMessages.some(
+          value={form?.title}
+          onChange={(e) => handleChange(e, "title")}
+          placeholder="e.g. Uber Ride"
+          invalid={responseMessages?.some(
             (r) => r.field === "title" && r.type === "error"
           )}
         />
         <Input
           id="category"
           label="Category"
-          defaultValue={details.category}
-          invalid={responseMessages.some(
+          value={form?.category}
+          onChange={(e) => handleChange(e, "category")}
+          placeholder="e.g. Transportation"
+          invalid={responseMessages?.some(
             (r) => r.field === "category" && r.type === "error"
           )}
         />
@@ -85,8 +94,10 @@ export default function TransactionDetailsDialog({
           id="amount"
           label="Amount"
           type="number"
-          defaultValue={details.amount}
-          invalid={responseMessages.some(
+          value={form?.amount}
+          onChange={(e) => handleChange(e, "amount")}
+          placeholder="e.g. $18"
+          invalid={responseMessages?.some(
             (r) => r.field === "amount" && r.type === "error"
           )}
         />
@@ -94,8 +105,9 @@ export default function TransactionDetailsDialog({
           id="date"
           label="Date"
           type="date"
-          defaultValue={details.date}
-          invalid={responseMessages.some(
+          value={form?.date}
+          onChange={(e) => handleChange(e, "date")}
+          invalid={responseMessages?.some(
             (r) => r.field === "date" && r.type === "error"
           )}
         />
@@ -105,9 +117,9 @@ export default function TransactionDetailsDialog({
             Update
           </Button>
         </div>
-        {responseMessages.length !== 0 && (
+        {responseMessages?.length !== 0 && (
           <div>
-            {responseMessages.map((r, index) => (
+            {responseMessages?.map((r, index) => (
               <p
                 key={index}
                 className={`font-semibold ${
@@ -120,6 +132,6 @@ export default function TransactionDetailsDialog({
           </div>
         )}
       </form>
-    </dialog>
+    </Dialog>
   );
 }

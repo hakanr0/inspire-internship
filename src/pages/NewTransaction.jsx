@@ -5,6 +5,10 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { transactionsActions } from "../store/transactions";
 
+// CUSTOM HOOKS
+import { useForm } from "../hooks/useForm";
+
+// ERROR HANDLER
 import { handleTransactionErrors } from "../util/errors";
 
 // ICONS
@@ -14,11 +18,11 @@ export default function NewTransaction() {
   const [responseMessages, setResponseMessages] = useState([]);
   const dispatch = useDispatch();
 
+  const { form, handleChange, resetForm } = useForm();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const fd = new FormData(e.target);
-    const obj = Object.fromEntries(fd);
-    let errors = handleTransactionErrors(obj);
+    let errors = handleTransactionErrors(form);
 
     if (errors.length !== 0) {
       setResponseMessages(errors);
@@ -26,7 +30,7 @@ export default function NewTransaction() {
     }
 
     dispatch(
-      transactionsActions.newTransaction({ id: Math.random() * 10000, ...obj })
+      transactionsActions.newTransaction({ ...form, id: Math.random() * 10000 })
     );
     setResponseMessages([
       {
@@ -35,6 +39,7 @@ export default function NewTransaction() {
         description: "Transaction created successfully.",
       },
     ]);
+    resetForm();
   };
 
   return (
@@ -45,17 +50,23 @@ export default function NewTransaction() {
       <Input
         id="title"
         label="Title"
-        invalid={responseMessages.some(
+        value={form?.title}
+        onChange={(e) => handleChange(e, "title")}
+        placeholder="e.g. Uber Ride"
+        invalid={responseMessages?.some(
           (r) => r.field === "title" && r.type === "error"
         )}
-        valid={responseMessages.some(
+        valid={responseMessages?.some(
           (r) => r.field === "title" && r.type === "success"
         )}
       />
       <Input
         id="category"
         label="Category"
-        invalid={responseMessages.some(
+        value={form?.category}
+        onChange={(e) => handleChange(e, "category")}
+        placeholder="e.g. Transportation"
+        invalid={responseMessages?.some(
           (r) => r.field === "category" && r.type === "error"
         )}
       />
@@ -63,7 +74,10 @@ export default function NewTransaction() {
         id="amount"
         label="Amount"
         type="number"
-        invalid={responseMessages.some(
+        value={form?.amount}
+        onChange={(e) => handleChange(e, "amount")}
+        placeholder="e.g. $18"
+        invalid={responseMessages?.some(
           (r) => r.field === "amount" && r.type === "error"
         )}
       />
@@ -71,7 +85,9 @@ export default function NewTransaction() {
         id="date"
         label="Transaction Date"
         type="date"
-        invalid={responseMessages.some(
+        value={form?.date}
+        onChange={(e) => handleChange(e, "date")}
+        invalid={responseMessages?.some(
           (r) => r.field === "date" && r.type === "error"
         )}
       />
@@ -80,9 +96,9 @@ export default function NewTransaction() {
           <AddIcon fontSize="small" /> Create
         </Button>
       </div>
-      {responseMessages.length !== 0 && (
+      {responseMessages?.length !== 0 && (
         <div>
-          {responseMessages.map((r, index) => (
+          {responseMessages?.map((r, index) => (
             <p
               key={index}
               className={`font-semibold ${
