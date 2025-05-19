@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import AddIcon from "@mui/icons-material/Add";
 import PersonIcon from "@mui/icons-material/Person";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function MenuDrawer({ open, toggle }) {
   const navLinkCss =
@@ -41,6 +42,9 @@ export default function MenuDrawer({ open, toggle }) {
             {item.title}
           </NavLink>
         ))}
+        <button className={`${navLinkCss} text-red-600 cursor-pointer`}>
+          <LogoutIcon /> Logout
+        </button>
       </nav>
     </SwipeableDrawer>
   );

@@ -16,13 +16,31 @@ export default function Login() {
     setShowPassword((prev) => !prev);
   };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const obj = Object.fromEntries(fd);
+
+    const response = await fetch("http://localhost:8080/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(obj),
+    });
+    const result = await response.json();
+    console.log(result);
+    if (!response.ok) {
+      console.log("Something went wrong!");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-8 w-[32rem] m-auto p-4 rounded-lg shadow max-sm:w-full">
       <h1 className="fleur-de-leah text-[2.5rem] text-center select-none max-md:text-4xl">
         Login
       </h1>
-      <form className="flex flex-col gap-4">
-        <Input id="username" label="Username" placeholder="Your username..." />
+      <form className="flex flex-col gap-4" onSubmit={handleLogin}>
+        <Input id="email" label="Email" placeholder="Your email..." />
         <Input
           id="password"
           label="Password"

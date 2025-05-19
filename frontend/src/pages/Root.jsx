@@ -5,17 +5,35 @@ import MenuDrawer from "../components/Drawers/MenuDrawer";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
+import { useDispatch } from "react-redux";
+
 // ICONS
 import MenuIcon from "@mui/icons-material/Menu";
+import { userActions } from "../store/user";
 
 export default function Root() {
   const [openDrawer, setOpenDrawer] = useState(false);
+  const dispatch = useDispatch();
 
   const toggleDrawer = (open) => {
     setOpenDrawer(open);
   };
 
+  const isLoggedIn = async () => {
+    const response = await fetch("http://localhost:8080/api/me", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+    const result = await response.json();
+    if (result) {
+      dispatch(userActions.login(result.token));
+    }
+  };
+
   useEffect(() => {
+    isLoggedIn();
+
     const handleResize = () => {
       if (window.innerWidth >= 768 && openDrawer === true) {
         setOpenDrawer(false);

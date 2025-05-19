@@ -39,14 +39,16 @@ export default function TransactionDetailsDialog({
     onClose();
   };
 
+  const handleClose = () => {
+    onClose();
+    resetForm();
+    setResponseMessages([]);
+  };
+
   return (
     <Dialog
       open={isOpen}
-      onClose={() => {
-        onClose();
-        resetForm();
-        setResponseMessages([]);
-      }}
+      onClose={handleClose}
       slotProps={{
         paper: {
           sx: {
@@ -62,11 +64,7 @@ export default function TransactionDetailsDialog({
           <h1 className="fleur-de-leah text-[2.5rem] select-none max-md:text-4xl">
             Details
           </h1>
-          <Button
-            btnAction="text-danger"
-            type="button"
-            onClick={() => onClose()}
-          >
+          <Button btnAction="text-danger" type="button" onClick={handleClose}>
             <CloseIcon fontSize="large" />
           </Button>
         </div>
