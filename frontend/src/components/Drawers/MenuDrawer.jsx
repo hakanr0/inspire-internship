@@ -58,7 +58,10 @@ export default function MenuDrawer({ open, toggle }) {
             {item.title}
           </NavLink>
         ))}
-        <button className={`${navLinkCss} text-red-600 cursor-pointer`}>
+        <button
+          className={`${navLinkCss} text-red-600 cursor-pointer`}
+          onClick={handleLogout}
+        >
           <LogoutIcon /> Logout
         </button>
       </nav>

@@ -1,6 +1,6 @@
 import Button from "./UI/Button";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { transactionsActions } from "../store/transactions";
 
 // ICONS
@@ -10,6 +10,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function TransactionCard({ transaction }) {
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.user.token);
 
   const handleShowTransactionDetails = () => {
     dispatch(transactionsActions.updateForm(transaction));
@@ -22,19 +23,21 @@ export default function TransactionCard({ transaction }) {
         <span className="leading-none p-3 rounded-full bg-[#0C6291] text-[#def2fc] group-hover:translate-x-2 duration-200">
           <ReceiptIcon fontSize="large" />
         </span>
-        <div className="flex gap-2">
-          <Button btnAction="update" onClick={handleShowTransactionDetails}>
-            <EditIcon fontSize="small" />
-          </Button>
-          <Button
-            btnAction="delete"
-            onClick={() =>
-              dispatch(transactionsActions.deleteTransaction(transaction.id))
-            }
-          >
-            <DeleteIcon fontSize="small" />
-          </Button>
-        </div>
+        {token && (
+          <div className="flex gap-2">
+            <Button btnAction="update" onClick={handleShowTransactionDetails}>
+              <EditIcon fontSize="small" />
+            </Button>
+            <Button
+              btnAction="delete"
+              onClick={() =>
+                dispatch(transactionsActions.deleteTransaction(transaction.id))
+              }
+            >
+              <DeleteIcon fontSize="small" />
+            </Button>
+          </div>
+        )}
       </div>
       <div>
         <h1 className="text-xl font-semibold">{transaction.title}</h1>
