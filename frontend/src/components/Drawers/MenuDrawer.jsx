@@ -1,6 +1,9 @@
 import { SwipeableDrawer } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
+import { useDispatch } from "react-redux";
+import { userActions } from "../../store/user";
+
 // ICONS
 import HomeIcon from "@mui/icons-material/Home";
 import AddIcon from "@mui/icons-material/Add";
@@ -8,6 +11,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function MenuDrawer({ open, toggle }) {
+  const dispatch = useDispatch();
+
   const navLinkCss =
     "flex items-center gap-2 p-2 rounded-lg hover:gap-3 duration-200";
 
@@ -16,6 +21,17 @@ export default function MenuDrawer({ open, toggle }) {
     { to: "/new", title: "Create New Transaction", icon: <AddIcon /> },
     { to: "/auth", title: "Login/Signup", icon: <PersonIcon /> },
   ];
+
+  const handleLogout = async () => {
+    const response = await fetch("http://localhost:8080/api/logout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+    const result = await response.json();
+    console.log(result);
+    dispatch(userActions.logout());
+  };
 
   return (
     <SwipeableDrawer

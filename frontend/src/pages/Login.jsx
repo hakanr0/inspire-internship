@@ -2,14 +2,19 @@ import Button from "../components/UI/Button";
 import Input from "../components/UI/Input";
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // ICONS
 import LoginIcon from "@mui/icons-material/Login";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useDispatch } from "react-redux";
+import { userActions } from "../store/user";
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
 
   const handleShowPassword = () => {
@@ -28,9 +33,9 @@ export default function Login() {
       body: JSON.stringify(obj),
     });
     const result = await response.json();
-    console.log(result);
-    if (!response.ok) {
-      console.log("Something went wrong!");
+    if (response.ok) {
+      dispatch(userActions.login(result.token));
+      navigate("/");
     }
   };
 

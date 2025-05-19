@@ -2,7 +2,7 @@ import Button from "../components/UI/Button";
 import Input from "../components/UI/Input";
 
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { transactionsActions } from "../store/transactions";
 
 // CUSTOM HOOKS
@@ -17,6 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 export default function NewTransaction() {
   const [responseMessages, setResponseMessages] = useState([]);
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.user.token);
 
   const { form, handleChange, resetForm } = useForm();
 
@@ -42,7 +43,7 @@ export default function NewTransaction() {
     resetForm();
   };
 
-  return (
+  return token ? (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <h1 className="fleur-de-leah text-[2.5rem] select-none max-md:text-4xl">
         New Transaction
@@ -111,5 +112,9 @@ export default function NewTransaction() {
         </div>
       )}
     </form>
+  ) : (
+    <p className="text-center font-semibold text-gray-400">
+      You don't have access to create a new transaction.
+    </p>
   );
 }

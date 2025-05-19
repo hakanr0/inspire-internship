@@ -13,6 +13,7 @@ import { userActions } from "../store/user";
 
 export default function Root() {
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
 
   const toggleDrawer = (open) => {
@@ -26,9 +27,10 @@ export default function Root() {
       credentials: "include",
     });
     const result = await response.json();
-    if (result) {
+    if (response.ok) {
       dispatch(userActions.login(result.token));
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -47,7 +49,7 @@ export default function Root() {
     };
   }, [openDrawer]);
 
-  return (
+  return !isLoading ? (
     <>
       <MenuDrawer open={openDrawer} toggle={toggleDrawer} />
       <main className="flex flex-col gap-4 w-screen h-screen p-4">
@@ -71,5 +73,7 @@ export default function Root() {
         </section>
       </main>
     </>
+  ) : (
+    <p>Loading...</p>
   );
 }
