@@ -8,13 +8,37 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function TransactionCard({ transaction }) {
+export default function TransactionCard({
+  id,
+  title,
+  categoryId,
+  category,
+  value,
+  date,
+}) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
 
   const handleShowTransactionDetails = () => {
-    dispatch(transactionsActions.updateForm(transaction));
+    dispatch(
+      transactionsActions.updateForm({
+        id,
+        title,
+        category: categoryId,
+        value,
+        createdAt: new Date(date).toISOString().split("T")[0],
+      })
+    );
     dispatch(transactionsActions.handleTransactionDetailsDialog());
+  };
+
+  const handleDelete = async () => {
+    await fetch(`http://localhost:8080/api/expenses/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+    dispatch(transactionsActions.deleteTransaction(id));
   };
 
   return (
@@ -28,24 +52,19 @@ export default function TransactionCard({ transaction }) {
             <Button btnAction="update" onClick={handleShowTransactionDetails}>
               <EditIcon fontSize="small" />
             </Button>
-            <Button
-              btnAction="delete"
-              onClick={() =>
-                dispatch(transactionsActions.deleteTransaction(transaction.id))
-              }
-            >
+            <Button btnAction="delete" onClick={handleDelete}>
               <DeleteIcon fontSize="small" />
             </Button>
           </div>
         )}
       </div>
       <div>
-        <h1 className="text-xl font-semibold">{transaction.title}</h1>
-        <p className="text-sm text-gray-500">{transaction.category}</p>
+        <h1 className="text-xl font-semibold">{title}</h1>
+        <p className="text-sm text-gray-500">{category}</p>
       </div>
-      <h1 className="text-2xl font-semibold">${transaction.amount}</h1>
+      <h1 className="text-2xl font-semibold">${value}</h1>
       <p className="text-sm font-semibold text-gray-500">
-        {new Date(transaction.date).toLocaleString("en-US", {
+        {new Date(date).toLocaleString("en-US", {
           month: "long",
           day: "2-digit",
           year: "numeric",

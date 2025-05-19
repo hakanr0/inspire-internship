@@ -14,6 +14,8 @@ import { handleTransactionErrors } from "../util/errors";
 // ICONS
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
+import Select from "./UI/Select";
+import { useSelector } from "react-redux";
 
 export default function TransactionDetailsDialog({
   isOpen,
@@ -22,6 +24,7 @@ export default function TransactionDetailsDialog({
 }) {
   const [responseMessages, setResponseMessages] = useState([]);
   const { form, handleChange, resetForm } = useForm();
+  const categories = useSelector((state) => state.transactions.categories);
 
   const handleUpdate = (e) => {
     e.preventDefault();
@@ -78,35 +81,32 @@ export default function TransactionDetailsDialog({
             (r) => r.field === "title" && r.type === "error"
           )}
         />
-        <Input
+        <Select
           id="category"
-          label="Category"
+          label="Categories"
+          options={categories}
           value={form?.category}
           onChange={(e) => handleChange(e, "category")}
-          placeholder="e.g. Transportation"
-          invalid={responseMessages?.some(
-            (r) => r.field === "category" && r.type === "error"
-          )}
         />
         <Input
-          id="amount"
-          label="Amount"
+          id="value"
+          label="Value"
           type="number"
-          value={form?.amount}
-          onChange={(e) => handleChange(e, "amount")}
+          value={form?.value}
+          onChange={(e) => handleChange(e, "value")}
           placeholder="e.g. $18"
           invalid={responseMessages?.some(
-            (r) => r.field === "amount" && r.type === "error"
+            (r) => r.field === "value" && r.type === "error"
           )}
         />
         <Input
-          id="date"
-          label="Date"
+          id="createdAt"
+          label="Transaction Date"
           type="date"
-          value={form?.date}
-          onChange={(e) => handleChange(e, "date")}
+          value={form?.createdAt}
+          onChange={(e) => handleChange(e, "createdAt")}
           invalid={responseMessages?.some(
-            (r) => r.field === "date" && r.type === "error"
+            (r) => r.field === "createdAt" && r.type === "error"
           )}
         />
         <div>

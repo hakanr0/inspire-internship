@@ -3,48 +3,23 @@ import { createSlice } from "@reduxjs/toolkit";
 const transactionsSlice = createSlice({
   name: "transactions",
   initialState: {
-    transactions: [
-      {
-        id: 4,
-        title: "Uber Ride",
-        category: "Transportation",
-        amount: 18,
-        date: "2025-05-05",
-      },
-      {
-        id: 3,
-        title: "Gym Membership",
-        category: "Health",
-        amount: 50,
-        date: "2025-05-05",
-      },
-      {
-        id: 2,
-        title: "Monthly Rent",
-        category: "Housing",
-        amount: 1200,
-        date: "2025-05-05",
-      },
-      {
-        id: 1,
-        title: "Grocery Shopping",
-        category: "Food",
-        amount: 45,
-        date: "2025-05-05",
-      },
-    ],
+    transactions: [],
+    categories: [],
     isViewingDetails: false,
     form: {
       id: 0,
       title: "",
-      category: "",
-      amount: 0,
-      date: "",
+      category: 1,
+      value: 0,
+      createdAt: "",
     },
   },
   reducers: {
     setTransactions(state, action) {
       state.transactions = action.payload;
+    },
+    setCategories(state, action) {
+      state.categories = action.payload;
     },
     newTransaction(state, action) {
       state.transactions.unshift(action.payload);
@@ -72,10 +47,11 @@ const transactionsSlice = createSlice({
       state.form[field] = value;
     },
     clearForm(state) {
+      state.form.id = 0;
       state.form.title = "";
-      state.form.category = "";
-      state.form.amount = 0;
-      state.form.date = "";
+      state.form.category = 1;
+      state.form.value = 0;
+      state.form.createdAt = "";
     },
   },
 });

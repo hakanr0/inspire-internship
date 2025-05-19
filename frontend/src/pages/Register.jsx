@@ -1,41 +1,38 @@
 import Button from "../components/UI/Button";
 import Input from "../components/UI/Input";
 
+import { useState } from "react";
 import { Link } from "react-router-dom";
+
+// CUSTOM HOOKS
+import { useAuth } from "../hooks/useAuth";
 
 // ICONS
 import HowToRegIcon from "@mui/icons-material/HowToReg";
-import { useState } from "react";
 
 export default function Register() {
-  const [responseMessages, setResponseMessages] = useState([]);
+  const { handleRegister } = useAuth();
+  const [responseMessage, setResponseMessage] = useState([]);
 
-  const handleRegister = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);
     const obj = Object.fromEntries(fd);
-    let errors = [];
 
     if (obj["password"] !== obj["confirm-password"]) {
-      errors.push({
+      setResponseMessage({
         type: "error",
-        field: "confirm-password",
         description: "Passwords do not match.",
       });
-    }
-
-    if (errors.length !== 0) {
-      setResponseMessages(errors);
       return;
     }
 
-    const response = await fetch("http://localhost:8080/api/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: obj.email, password: obj.password }),
+    const result = await handleRegister({
+      email: obj.email,
+      password: obj.password,
     });
-    const result = await response.json();
     console.log(result);
+    setResponseMessage(result);
   };
 
   return (
@@ -43,25 +40,43 @@ export default function Register() {
       <h1 className="fleur-de-leah text-[2.5rem] text-center select-none max-md:text-4xl">
         Register
       </h1>
-      <form className="flex flex-col gap-4" onSubmit={handleRegister}>
-        <Input id="email" label="Email" placeholder="johnwayne@example.com" />
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <Input
+          id="email"
+          label="Email"
+          placeholder="johnwayne@example.com"
+          invalid={responseMessage?.type === "error"}
+          valid={responseMessage?.type === "success"}
+        />
         <div className="flex gap-2">
           <Input
             id="password"
             label="Password"
             type="password"
             placeholder="******"
+            invalid={responseMessage?.type === "error"}
+            valid={responseMessage?.type === "success"}
           />
           <Input
             id="confirm-password"
             label="Confirm"
             type="password"
             placeholder="******"
-            invalid={responseMessages?.some(
-              (r) => r.field === "confirm-password" && r.type === "error"
-            )}
+            invalid={responseMessage?.type === "error"}
+            valid={responseMessage?.type === "success"}
           />
         </div>
+        {responseMessage && (
+          <p
+            className={`font-semibold ${
+              responseMessage?.type === "error"
+                ? "text-red-600"
+                : "text-green-600"
+            }`}
+          >
+            {responseMessage.description}
+          </p>
+        )}
         <Button btnAction="read">
           <HowToRegIcon fontSize="small" />
           Register

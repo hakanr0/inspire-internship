@@ -10,8 +10,25 @@ export default function Home() {
   );
   const dispatch = useDispatch();
 
-  const handleUpdate = (transaction) => {
-    dispatch(transactionsActions.updateTransaction(transaction));
+  const handleUpdate = async (transaction) => {
+    console.log(transaction);
+    const response = await fetch(
+      `http://localhost:8080/api/expenses/${transaction.id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          title: transaction.title,
+          value: transaction.value,
+          categoryId: transaction.category,
+        }),
+      }
+    );
+    const result = await response.json();
+    if (response.ok) {
+      dispatch(transactionsActions.updateTransaction(result));
+    }
   };
 
   return (
@@ -30,7 +47,15 @@ export default function Home() {
         {transactions?.length !== 0 ? (
           <div className="grid grid-cols-3 gap-4 max-xl:grid-cols-2 max-md:grid-cols-1">
             {transactions?.map((t) => (
-              <TransactionCard key={t.id} transaction={t} />
+              <TransactionCard
+                key={t.id}
+                id={t.id}
+                title={t.title}
+                categoryId={t.category.id}
+                category={t.category.name}
+                value={t.value}
+                date={t.updatedAt}
+              />
             ))}
           </div>
         ) : (

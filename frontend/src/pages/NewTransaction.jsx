@@ -13,15 +13,17 @@ import { handleTransactionErrors } from "../util/errors";
 
 // ICONS
 import AddIcon from "@mui/icons-material/Add";
+import Select from "../components/UI/Select";
 
 export default function NewTransaction() {
   const [responseMessages, setResponseMessages] = useState([]);
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
+  const categories = useSelector((state) => state.transactions.categories);
 
   const { form, handleChange, resetForm } = useForm();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let errors = handleTransactionErrors(form);
 
@@ -30,9 +32,19 @@ export default function NewTransaction() {
       return;
     }
 
-    dispatch(
-      transactionsActions.newTransaction({ ...form, id: Math.random() * 10000 })
-    );
+    const response = await fetch("http://localhost:8080/api/expenses", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        title: form.title,
+        value: form.value,
+        categoryId: form.category,
+      }),
+    });
+    const result = await response.json();
+
+    dispatch(transactionsActions.newTransaction(result));
     setResponseMessages([
       {
         type: "success",
@@ -61,35 +73,32 @@ export default function NewTransaction() {
           (r) => r.field === "title" && r.type === "success"
         )}
       />
-      <Input
+      <Select
         id="category"
-        label="Category"
+        label="Categories"
+        options={categories}
         value={form?.category}
         onChange={(e) => handleChange(e, "category")}
-        placeholder="e.g. Transportation"
-        invalid={responseMessages?.some(
-          (r) => r.field === "category" && r.type === "error"
-        )}
       />
       <Input
-        id="amount"
-        label="Amount"
+        id="value"
+        label="Value"
         type="number"
-        value={form?.amount}
-        onChange={(e) => handleChange(e, "amount")}
+        value={form?.value}
+        onChange={(e) => handleChange(e, "value")}
         placeholder="e.g. $18"
         invalid={responseMessages?.some(
-          (r) => r.field === "amount" && r.type === "error"
+          (r) => r.field === "value" && r.type === "error"
         )}
       />
       <Input
-        id="date"
+        id="createdAt"
         label="Transaction Date"
         type="date"
-        value={form?.date}
-        onChange={(e) => handleChange(e, "date")}
+        value={form?.createdAt}
+        onChange={(e) => handleChange(e, "createdAt")}
         invalid={responseMessages?.some(
-          (r) => r.field === "date" && r.type === "error"
+          (r) => r.field === "createdAt" && r.type === "error"
         )}
       />
       <div>

@@ -7,22 +7,16 @@ export const handleTransactionErrors = (transaction) => {
       field: "title",
       description: "Title is required.",
     });
-  if (transaction.category.trim() === "")
+  if (transaction.value === "")
     errors.push({
       type: "error",
-      field: "category",
-      description: "Category is required.",
+      field: "value",
+      description: "Value is required.",
     });
-  if (transaction.amount === "")
+  if (transaction.createdAt.trim() === "")
     errors.push({
       type: "error",
-      field: "amount",
-      description: "Amount is required.",
-    });
-  if (transaction.date.trim() === "")
-    errors.push({
-      type: "error",
-      field: "date",
+      field: "createdAt",
       description: "Date is required.",
     });
 

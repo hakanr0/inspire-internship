@@ -1,7 +1,9 @@
 import { NavLink } from "react-router-dom";
 
-import { useDispatch, useSelector } from "react-redux";
-import { userActions } from "../../store/user";
+import { useSelector } from "react-redux";
+
+// CUSTOM HOOKS
+import { useAuth } from "../../hooks/useAuth";
 
 // ICONS
 import HomeIcon from "@mui/icons-material/Home";
@@ -10,10 +12,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function SideNav() {
-  const dispatch = useDispatch();
+  const { handleLogout } = useAuth();
   const token = useSelector((state) => state.user.token);
-
-  console.log(token);
 
   const navLinkCss =
     "flex items-center gap-2 p-2 rounded-lg hover:gap-3 duration-200";
@@ -33,17 +33,6 @@ export default function SideNav() {
       show: token ? false : true,
     },
   ];
-
-  const handleLogout = async () => {
-    const response = await fetch("http://localhost:8080/api/logout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
-    const result = await response.json();
-    console.log(result);
-    dispatch(userActions.logout());
-  };
 
   return (
     <nav className="flex flex-col gap-2 w-96 h-fit p-4 rounded-lg bg-[#def2fc] text-slate-900 max-lg:w-fit max-md:hidden">

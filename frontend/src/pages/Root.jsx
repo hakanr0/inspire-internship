@@ -6,12 +6,16 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
+import { transactionsActions } from "../store/transactions";
+
+// CUSTOM HOOKS
+import { useAuth } from "../hooks/useAuth";
 
 // ICONS
 import MenuIcon from "@mui/icons-material/Menu";
-import { userActions } from "../store/user";
 
 export default function Root() {
+  const { isLoggedIn } = useAuth();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
@@ -20,21 +24,25 @@ export default function Root() {
     setOpenDrawer(open);
   };
 
-  const isLoggedIn = async () => {
-    const response = await fetch("http://localhost:8080/api/me", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
+  const fetchExpenses = async () => {
+    const response = await fetch("http://localhost:8080/api/expenses");
     const result = await response.json();
-    if (response.ok) {
-      dispatch(userActions.login(result.token));
-    }
+    dispatch(transactionsActions.setTransactions([...result].reverse()));
+  };
+
+  const fetchCategories = async () => {
+    const response = await fetch("http://localhost:8080/api/categories");
+    const result = await response.json();
+    dispatch(transactionsActions.setCategories(result));
     setIsLoading(false);
   };
 
   useEffect(() => {
-    isLoggedIn();
+    if (isLoading) {
+      isLoggedIn();
+      fetchExpenses();
+      fetchCategories();
+    }
 
     const handleResize = () => {
       if (window.innerWidth >= 768 && openDrawer === true) {

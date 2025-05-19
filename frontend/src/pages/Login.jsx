@@ -2,40 +2,34 @@ import Button from "../components/UI/Button";
 import Input from "../components/UI/Input";
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
+// CUSTOM HOOKS
+import { useAuth } from "../hooks/useAuth";
 
 // ICONS
 import LoginIcon from "@mui/icons-material/Login";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useDispatch } from "react-redux";
-import { userActions } from "../store/user";
 
 export default function Login() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
+  const { handleLogin } = useAuth();
+  const [error, setError] = useState();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);
     const obj = Object.fromEntries(fd);
 
-    const response = await fetch("http://localhost:8080/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(obj),
-    });
-    const result = await response.json();
-    if (response.ok) {
-      dispatch(userActions.login(result.token));
-      navigate("/");
+    const result = await handleLogin(obj);
+
+    if (result) {
+      setError(result.message);
     }
   };
 
@@ -44,13 +38,19 @@ export default function Login() {
       <h1 className="fleur-de-leah text-[2.5rem] text-center select-none max-md:text-4xl">
         Login
       </h1>
-      <form className="flex flex-col gap-4" onSubmit={handleLogin}>
-        <Input id="email" label="Email" placeholder="Your email..." />
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <Input
+          id="email"
+          label="Email"
+          placeholder="Your email..."
+          invalid={error}
+        />
         <Input
           id="password"
           label="Password"
           type={showPassword ? "text" : "password"}
           placeholder="******"
+          invalid={error}
         />
         <p className="flex items-center gap-2 text-sm">
           <Button btnAction="read" type="button" onClick={handleShowPassword}>
@@ -62,6 +62,7 @@ export default function Login() {
           </Button>
           {showPassword ? "Hide Password" : "Show Password"}
         </p>
+        {error && <p className="font-semibold text-red-600">{error}</p>}
         <Button btnAction="read">
           <LoginIcon fontSize="small" />
           Login
