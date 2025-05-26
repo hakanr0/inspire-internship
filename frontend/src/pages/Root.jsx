@@ -27,7 +27,13 @@ export default function Root() {
   const fetchExpenses = async () => {
     const response = await fetch("http://localhost:8080/api/expenses");
     const result = await response.json();
-    dispatch(transactionsActions.setTransactions([...result].reverse()));
+    dispatch(
+      transactionsActions.setTransactions(
+        [...result].sort(
+          (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+        )
+      )
+    );
   };
 
   const fetchCategories = async () => {

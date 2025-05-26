@@ -32,14 +32,18 @@ export default function TransactionCard({
     dispatch(transactionsActions.handleTransactionDetailsDialog());
   };
 
-  const handleDelete = async () => {
-    await fetch(`http://localhost:8080/api/expenses/${id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
-    dispatch(transactionsActions.deleteTransaction(id));
+  const handleShowConfirmDeletion = () => {
+    dispatch(transactionsActions.handleConfirmDeletionDialog(id));
   };
+
+  // const handleDelete = async () => {
+  //   await fetch(`http://localhost:8080/api/expenses/${id}`, {
+  //     method: "DELETE",
+  //     headers: { "Content-Type": "application/json" },
+  //     credentials: "include",
+  //   });
+  //   dispatch(transactionsActions.deleteTransaction(id));
+  // };
 
   return (
     <div className="group flex flex-col justify-between gap-4 p-4 rounded-lg bg-[#def2fc] shadow-lg break-all hover:shadow-none duration-200">
@@ -52,7 +56,7 @@ export default function TransactionCard({
             <Button btnAction="update" onClick={handleShowTransactionDetails}>
               <EditIcon fontSize="small" />
             </Button>
-            <Button btnAction="delete" onClick={handleDelete}>
+            <Button btnAction="delete" onClick={handleShowConfirmDeletion}>
               <DeleteIcon fontSize="small" />
             </Button>
           </div>
