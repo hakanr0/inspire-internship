@@ -3,6 +3,7 @@ import Button from "./UI/Button";
 import { Dialog } from "@mui/material";
 
 // ICONS
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 
@@ -14,31 +15,38 @@ export default function ConfirmDeletionDialog({ isOpen, onClose, onDelete }) {
       slotProps={{
         paper: {
           sx: {
-            padding: "16px",
+            padding: "32px",
             borderRadius: "8px",
           },
         },
       }}
     >
-      <h1 className="text-lg mb-4">
-        Are you sure you want to{" "}
-        <span className="font-bold text-red-600">delete</span> this transaction?
-        This action <span className="font-bold">cannot be undone</span>.
-      </h1>
-      <p className="flex items-center justify-end gap-2">
-        <Button btnAction="cancel" onClick={onClose}>
-          <CloseIcon fontSize="small" />
-        </Button>
-        <Button
-          btnAction="delete"
-          onClick={() => {
-            onDelete();
-            onClose();
-          }}
-        >
-          <DoneIcon fontSize="small" />
-        </Button>
-      </p>
+      <div className="flex flex-col items-center gap-6">
+        <p className="p-4 rounded-full text-red-600 border border-red-600">
+          <DeleteForeverIcon fontSize="large" />
+        </p>
+        <h1 className="text-3xl font-bold">Are you sure?</h1>
+        <p className="w-96 max-sm:w-full">
+          Do you really want to{" "}
+          <span className="font-bold text-red-600">delete</span> this
+          transaction? This action{" "}
+          <span className="font-bold">cannot be undone</span>.
+        </p>
+        <p className="flex gap-2">
+          <Button btnAction="cancel" onClick={onClose}>
+            <CloseIcon fontSize="small" /> Cancel
+          </Button>
+          <Button
+            btnAction="delete"
+            onClick={() => {
+              onDelete();
+              onClose();
+            }}
+          >
+            <DoneIcon fontSize="small" /> Confirm
+          </Button>
+        </p>
+      </div>
     </Dialog>
   );
 }
