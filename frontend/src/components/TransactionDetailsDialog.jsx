@@ -55,7 +55,7 @@ export default function TransactionDetailsDialog({
       slotProps={{
         paper: {
           sx: {
-            minWidth: "24rem",
+            width: "24rem",
             padding: "16px",
             borderRadius: "8px",
           },
