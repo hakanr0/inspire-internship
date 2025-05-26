@@ -25,13 +25,13 @@ export default function MenuDrawer({ open, toggle }) {
       to: "/new",
       title: "Create New Transaction",
       icon: <AddIcon />,
-      show: token ? true : false,
+      show: Boolean(token),
     },
     {
       to: "/auth",
       title: "Login/Signup",
       icon: <PersonIcon />,
-      show: token ? false : true,
+      show: Boolean(!token),
     },
   ];
 

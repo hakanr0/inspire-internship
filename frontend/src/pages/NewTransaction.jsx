@@ -91,16 +91,6 @@ export default function NewTransaction() {
           (r) => r.field === "value" && r.type === "error"
         )}
       />
-      <Input
-        id="createdAt"
-        label="Transaction Date"
-        type="date"
-        value={form?.createdAt}
-        onChange={(e) => handleChange(e, "createdAt")}
-        invalid={responseMessages?.some(
-          (r) => r.field === "createdAt" && r.type === "error"
-        )}
-      />
       <div>
         <Button btnAction="create">
           <AddIcon fontSize="small" /> Create

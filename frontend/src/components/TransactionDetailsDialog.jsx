@@ -68,7 +68,7 @@ export default function TransactionDetailsDialog({
             Details
           </h1>
           <Button btnAction="text-danger" type="button" onClick={handleClose}>
-            <CloseIcon fontSize="large" />
+            <CloseIcon />
           </Button>
         </div>
         <Input
@@ -97,16 +97,6 @@ export default function TransactionDetailsDialog({
           placeholder="e.g. $18"
           invalid={responseMessages?.some(
             (r) => r.field === "value" && r.type === "error"
-          )}
-        />
-        <Input
-          id="createdAt"
-          label="Transaction Date"
-          type="date"
-          value={form?.createdAt}
-          onChange={(e) => handleChange(e, "createdAt")}
-          invalid={responseMessages?.some(
-            (r) => r.field === "createdAt" && r.type === "error"
           )}
         />
         <div>

@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 export default function AuthRoot() {
   const token = useSelector((state) => state.user.token);
@@ -9,6 +10,9 @@ export default function AuthRoot() {
       You are already logged in.
     </p>
   ) : (
-    <Outlet />
+    <>
+      <ToastContainer />
+      <Outlet />
+    </>
   );
 }

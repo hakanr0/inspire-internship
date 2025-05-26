@@ -6,6 +6,10 @@ const transactionsSlice = createSlice({
     transactions: [],
     categories: [],
     isViewingDetails: false,
+    deleteConfirmation: {
+      showModal: false,
+      transactionIdToDelete: 0,
+    },
     form: {
       id: 0,
       title: "",
@@ -38,6 +42,10 @@ const transactionsSlice = createSlice({
     },
     handleTransactionDetailsDialog(state) {
       state.isViewingDetails = !state.isViewingDetails;
+    },
+    handleConfirmDeletionDialog(state, action) {
+      state.deleteConfirmation.showModal = !state.deleteConfirmation.showModal;
+      state.deleteConfirmation.transactionIdToDelete = action.payload;
     },
     updateForm(state, action) {
       state.form = action.payload;

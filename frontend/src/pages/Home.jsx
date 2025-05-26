@@ -1,17 +1,19 @@
 import TransactionCard from "../components/TransactionCard";
 import TransactionDetailsDialog from "../components/TransactionDetailsDialog";
+import ConfirmDeletionDialog from "../components/ConfirmDeletionDialog";
 
 import { useDispatch, useSelector } from "react-redux";
 import { transactionsActions } from "../store/transactions";
 
+import { ToastContainer, toast } from "react-toastify";
+
 export default function Home() {
-  const { transactions, isViewingDetails } = useSelector(
+  const { transactions, isViewingDetails, deleteConfirmation } = useSelector(
     (state) => state.transactions
   );
   const dispatch = useDispatch();
 
   const handleUpdate = async (transaction) => {
-    console.log(transaction);
     const response = await fetch(
       `http://localhost:8080/api/expenses/${transaction.id}`,
       {
@@ -28,7 +30,25 @@ export default function Home() {
     const result = await response.json();
     if (response.ok) {
       dispatch(transactionsActions.updateTransaction(result));
+      toast.success("Transaction updated successfully.");
     }
+  };
+
+  const handleDelete = async () => {
+    await fetch(
+      `http://localhost:8080/api/expenses/${deleteConfirmation.transactionIdToDelete}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      }
+    );
+    dispatch(
+      transactionsActions.deleteTransaction(
+        deleteConfirmation.transactionIdToDelete
+      )
+    );
+    toast.success("Transaction deleted successfully.");
   };
 
   return (
@@ -40,6 +60,14 @@ export default function Home() {
         }
         onUpdate={handleUpdate}
       />
+      <ConfirmDeletionDialog
+        isOpen={deleteConfirmation.showModal}
+        onClose={() =>
+          dispatch(transactionsActions.handleConfirmDeletionDialog())
+        }
+        onDelete={handleDelete}
+      />
+      <ToastContainer autoClose={3000} />
       <section>
         <h1 className="fleur-de-leah mb-4 text-[2.5rem] select-none max-md:text-4xl">
           Home

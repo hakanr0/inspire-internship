@@ -11,6 +11,7 @@ import { useAuth } from "../hooks/useAuth";
 import LoginIcon from "@mui/icons-material/Login";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { handleLoginErrors } from "../util/errors";
 
 export default function Login() {
   const { handleLogin } = useAuth();
@@ -26,8 +27,13 @@ export default function Login() {
     const fd = new FormData(e.target);
     const obj = Object.fromEntries(fd);
 
-    const result = await handleLogin(obj);
+    const loginError = handleLoginErrors(obj);
+    if (loginError) {
+      setError(loginError);
+      return;
+    }
 
+    const result = await handleLogin(obj);
     if (result) {
       setError(result.message);
     }

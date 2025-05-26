@@ -2,10 +2,15 @@ import Button from "../components/UI/Button";
 import Input from "../components/UI/Input";
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import { toast } from "react-toastify";
 
 // CUSTOM HOOKS
 import { useAuth } from "../hooks/useAuth";
+
+// ERROR HANDLER
+import { handleRegisterErrors } from "../util/errors";
 
 // ICONS
 import HowToRegIcon from "@mui/icons-material/HowToReg";
@@ -13,17 +18,16 @@ import HowToRegIcon from "@mui/icons-material/HowToReg";
 export default function Register() {
   const { handleRegister } = useAuth();
   const [responseMessage, setResponseMessage] = useState([]);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);
     const obj = Object.fromEntries(fd);
 
-    if (obj["password"] !== obj["confirm-password"]) {
-      setResponseMessage({
-        type: "error",
-        description: "Passwords do not match.",
-      });
+    const registerError = handleRegisterErrors(obj);
+    if (registerError) {
+      setResponseMessage(registerError);
       return;
     }
 
@@ -31,7 +35,11 @@ export default function Register() {
       email: obj.email,
       password: obj.password,
     });
-    console.log(result);
+    if (result.type === "success") {
+      toast.success(result.description);
+      navigate("/auth");
+      return;
+    }
     setResponseMessage(result);
   };
 
