@@ -2,23 +2,27 @@ import TransactionCard from "../components/TransactionCard";
 import TransactionDetailsDialog from "../components/TransactionDetailsDialog";
 import ConfirmDeletionDialog from "../components/ConfirmDeletionDialog";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { transactionsActions } from "../store/transactions";
+
+import type { FormType } from "../types/transactionTypes";
 
 import { ToastContainer, toast } from "react-toastify";
 
-export default function Home() {
-  const { transactions, isViewingDetails, deleteConfirmation } = useSelector(
+const Home: React.FC = () => {
+  const { transactions, isViewingDetails, deleteConfirmation } = useAppSelector(
     (state) => state.transactions
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const handleUpdate = async (transaction) => {
+  const handleUpdate = async (transaction: FormType) => {
     const response = await fetch(
       `http://localhost:8080/api/expenses/${transaction.id}`,
       {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         credentials: "include",
         body: JSON.stringify({
           title: transaction.title,
@@ -39,7 +43,9 @@ export default function Home() {
       `http://localhost:8080/api/expenses/${deleteConfirmation.transactionIdToDelete}`,
       {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         credentials: "include",
       }
     );
@@ -63,7 +69,7 @@ export default function Home() {
       <ConfirmDeletionDialog
         isOpen={deleteConfirmation.showModal}
         onClose={() =>
-          dispatch(transactionsActions.handleConfirmDeletionDialog())
+          dispatch(transactionsActions.handleConfirmDeletionDialog(0))
         }
         onDelete={handleDelete}
       />
@@ -94,4 +100,6 @@ export default function Home() {
       </section>
     </>
   );
-}
+};
+
+export default Home;

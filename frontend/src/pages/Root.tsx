@@ -5,7 +5,7 @@ import MenuDrawer from "../components/Drawers/MenuDrawer";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../store/hooks";
 import { transactionsActions } from "../store/transactions";
 
 // CUSTOM HOOKS
@@ -14,13 +14,13 @@ import { useAuth } from "../hooks/useAuth";
 // ICONS
 import MenuIcon from "@mui/icons-material/Menu";
 
-export default function Root() {
+const Root: React.FC = () => {
   const { isLoggedIn } = useAuth();
-  const [openDrawer, setOpenDrawer] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const dispatch = useDispatch();
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const dispatch = useAppDispatch();
 
-  const toggleDrawer = (open) => {
+  const toggleDrawer = (open: boolean) => {
     setOpenDrawer(open);
   };
 
@@ -30,7 +30,8 @@ export default function Root() {
     dispatch(
       transactionsActions.setTransactions(
         [...result].sort(
-          (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+          (a, b) =>
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
         )
       )
     );
@@ -90,4 +91,6 @@ export default function Root() {
   ) : (
     <p>Loading...</p>
   );
-}
+};
+
+export default Root;

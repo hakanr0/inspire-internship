@@ -7,7 +7,17 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 
-export default function ConfirmDeletionDialog({ isOpen, onClose, onDelete }) {
+type ConfirmDeletionDialogProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  onDelete: () => void;
+};
+
+const ConfirmDeletionDialog: React.FC<ConfirmDeletionDialogProps> = ({
+  isOpen,
+  onClose,
+  onDelete,
+}) => {
   return (
     <Dialog
       open={isOpen}
@@ -49,4 +59,6 @@ export default function ConfirmDeletionDialog({ isOpen, onClose, onDelete }) {
       </div>
     </Dialog>
   );
-}
+};
+
+export default ConfirmDeletionDialog;

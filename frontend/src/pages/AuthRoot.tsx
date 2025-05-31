@@ -1,9 +1,9 @@
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../store/hooks";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
-export default function AuthRoot() {
-  const token = useSelector((state) => state.user.token);
+const AuthRoot: React.FC = () => {
+  const token = useAppSelector((state) => state.user.token);
 
   return token ? (
     <p className="text-center font-semibold text-gray-400">
@@ -15,4 +15,6 @@ export default function AuthRoot() {
       <Outlet />
     </>
   );
-}
+};
+
+export default AuthRoot;

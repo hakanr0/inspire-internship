@@ -1,4 +1,10 @@
-export default function Select({ id, label, options, ...props }) {
+type SelectProps = {
+  id: string;
+  label: string;
+  options: { id: number; name: string }[];
+} & React.SelectHTMLAttributes<HTMLSelectElement>;
+
+const Select: React.FC<SelectProps> = ({ id, label, options, ...props }) => {
   return (
     <p className="flex flex-col gap-2 w-full">
       <label className="text-sm font-semibold">{label}</label>
@@ -9,11 +15,13 @@ export default function Select({ id, label, options, ...props }) {
         {...props}
       >
         {options?.map((o) => (
-          <option key={o.id} name={o.name} value={o.id}>
+          <option key={o.id} value={o.id}>
             {o.name}
           </option>
         ))}
       </select>
     </p>
   );
-}
+};
+
+export default Select;

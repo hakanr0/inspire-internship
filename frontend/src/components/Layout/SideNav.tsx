@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../store/hooks";
 
 // CUSTOM HOOKS
 import { useAuth } from "../../hooks/useAuth";
@@ -13,7 +13,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function SideNav() {
   const { handleLogout } = useAuth();
-  const token = useSelector((state) => state.user.token);
+  const token = useAppSelector((state) => state.user.token);
 
   const navLinkCss =
     "flex items-center gap-2 p-2 rounded-lg hover:gap-3 duration-200";

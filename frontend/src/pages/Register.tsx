@@ -17,30 +17,38 @@ import HowToRegIcon from "@mui/icons-material/HowToReg";
 
 export default function Register() {
   const { handleRegister } = useAuth();
-  const [responseMessage, setResponseMessage] = useState([]);
+  const [responseMessage, setResponseMessage] = useState<{
+    type: string;
+    description: string;
+  }>();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.target);
+    const fd = new FormData(e.currentTarget);
     const obj = Object.fromEntries(fd);
 
-    const registerError = handleRegisterErrors(obj);
+    const registerError = handleRegisterErrors({
+      email: obj.email as string,
+      password: obj.password as string,
+      "confirm-password": obj["confirm-password"] as string,
+    });
     if (registerError) {
       setResponseMessage(registerError);
       return;
     }
 
     const result = await handleRegister({
-      email: obj.email,
-      password: obj.password,
+      email: obj.email as string,
+      password: obj.password as string,
     });
     if (result.type === "success") {
       toast.success(result.description);
       navigate("/auth");
-      return;
+      // return;
+    } else {
+      setResponseMessage(result);
     }
-    setResponseMessage(result);
   };
 
   return (
@@ -54,7 +62,6 @@ export default function Register() {
           label="Email"
           placeholder="johnwayne@example.com"
           invalid={responseMessage?.type === "error"}
-          valid={responseMessage?.type === "success"}
         />
         <div className="flex gap-2">
           <Input
@@ -63,7 +70,6 @@ export default function Register() {
             type="password"
             placeholder="******"
             invalid={responseMessage?.type === "error"}
-            valid={responseMessage?.type === "success"}
           />
           <Input
             id="confirm-password"
@@ -71,17 +77,10 @@ export default function Register() {
             type="password"
             placeholder="******"
             invalid={responseMessage?.type === "error"}
-            valid={responseMessage?.type === "success"}
           />
         </div>
         {responseMessage && (
-          <p
-            className={`font-semibold ${
-              responseMessage?.type === "error"
-                ? "text-red-600"
-                : "text-green-600"
-            }`}
-          >
+          <p className={"font-semibold text-red-600"}>
             {responseMessage.description}
           </p>
         )}

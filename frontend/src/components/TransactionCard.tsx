@@ -1,6 +1,6 @@
 import Button from "./UI/Button";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { transactionsActions } from "../store/transactions";
 
 // ICONS
@@ -8,16 +8,25 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function TransactionCard({
+type TransactionCardProps = {
+  id: number;
+  title: string;
+  categoryId: number;
+  category: string;
+  value: number;
+  date: string;
+};
+
+const TransactionCard: React.FC<TransactionCardProps> = ({
   id,
   title,
   categoryId,
   category,
   value,
   date,
-}) {
-  const dispatch = useDispatch();
-  const token = useSelector((state) => state.user.token);
+}) => {
+  const dispatch = useAppDispatch();
+  const token = useAppSelector((state) => state.user.token);
 
   const handleShowTransactionDetails = () => {
     dispatch(
@@ -26,7 +35,6 @@ export default function TransactionCard({
         title,
         category: categoryId,
         value,
-        createdAt: new Date(date).toISOString().split("T")[0],
       })
     );
     dispatch(transactionsActions.handleTransactionDetailsDialog());
@@ -44,10 +52,18 @@ export default function TransactionCard({
         </span>
         {token && (
           <div className="flex gap-2">
-            <Button btnAction="update" onClick={handleShowTransactionDetails}>
+            <Button
+              btnAction="update"
+              onClick={handleShowTransactionDetails}
+              aria-label="edit transaction"
+            >
               <EditIcon fontSize="small" />
             </Button>
-            <Button btnAction="delete" onClick={handleShowConfirmDeletion}>
+            <Button
+              btnAction="delete"
+              onClick={handleShowConfirmDeletion}
+              aria-label="delete transaction"
+            >
               <DeleteIcon fontSize="small" />
             </Button>
           </div>
@@ -67,4 +83,6 @@ export default function TransactionCard({
       </p>
     </div>
   );
-}
+};
+
+export default TransactionCard;

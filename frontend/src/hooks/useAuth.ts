@@ -1,13 +1,15 @@
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../store/hooks";
 import { userActions } from "../store/user";
 
 import { useNavigate } from "react-router-dom";
 
+import type { Credentials } from "../types/userTypes";
+
 export const useAuth = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleRegister = async (creds) => {
+  const handleRegister = async (creds: Credentials) => {
     const response = await fetch("http://localhost:8080/api/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -24,7 +26,7 @@ export const useAuth = () => {
     }
   };
 
-  const handleLogin = async (creds) => {
+  const handleLogin = async (creds: Credentials) => {
     const response = await fetch("http://localhost:8080/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
