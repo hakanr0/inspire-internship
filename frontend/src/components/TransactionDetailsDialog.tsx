@@ -2,8 +2,13 @@ import { Dialog } from "@mui/material";
 
 import Button from "./UI/Button";
 import Input from "./UI/Input";
+import Select from "./UI/Select";
 
 import { useState } from "react";
+
+import { useAppSelector } from "../store/hooks";
+
+import type { FormType } from "../types/transactionTypes";
 
 // CUSTOM HOOKS
 import { useForm } from "../hooks/useForm";
@@ -14,23 +19,32 @@ import { handleTransactionErrors } from "../util/errors";
 // ICONS
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
-import Select from "./UI/Select";
-import { useSelector } from "react-redux";
 
-export default function TransactionDetailsDialog({
+type TransactionDetailsDialogProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  onUpdate: (form: FormType) => void;
+};
+
+const TransactionDetailsDialog: React.FC<TransactionDetailsDialogProps> = ({
   isOpen,
   onClose,
   onUpdate,
-}) {
-  const [responseMessages, setResponseMessages] = useState([]);
+}) => {
+  const [responseMessages, setResponseMessages] = useState<
+    { type: string; field: string; description: string }[]
+  >([]);
   const { form, handleChange, resetForm } = useForm();
-  const categories = useSelector((state) => state.transactions.categories);
+  const categories = useAppSelector((state) => state.transactions.categories);
 
-  const handleUpdate = (e) => {
+  const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.target);
+    const fd = new FormData(e.currentTarget);
     const obj = Object.fromEntries(fd);
-    let errors = handleTransactionErrors(obj);
+    let errors = handleTransactionErrors({
+      title: obj.title as string,
+      value: Number(obj.value),
+    });
 
     if (errors.length !== 0) {
       setResponseMessages(errors);
@@ -122,4 +136,6 @@ export default function TransactionDetailsDialog({
       </form>
     </Dialog>
   );
-}
+};
+
+export default TransactionDetailsDialog;

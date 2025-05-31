@@ -7,33 +7,41 @@ import { Link } from "react-router-dom";
 // CUSTOM HOOKS
 import { useAuth } from "../hooks/useAuth";
 
+// HANDLE ERRORS
+import { handleLoginErrors } from "../util/errors";
+
 // ICONS
 import LoginIcon from "@mui/icons-material/Login";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { handleLoginErrors } from "../util/errors";
 
-export default function Login() {
+const Login: React.FC = () => {
   const { handleLogin } = useAuth();
-  const [error, setError] = useState();
-  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string>();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.target);
+    const fd = new FormData(e.currentTarget);
     const obj = Object.fromEntries(fd);
 
-    const loginError = handleLoginErrors(obj);
+    const loginError = handleLoginErrors({
+      email: obj.email as string,
+      password: obj.password as string,
+    });
     if (loginError) {
       setError(loginError);
       return;
     }
 
-    const result = await handleLogin(obj);
+    const result = await handleLogin({
+      email: obj.email as string,
+      password: obj.password as string,
+    });
     if (result) {
       setError(result.message);
     }
@@ -49,14 +57,14 @@ export default function Login() {
           id="email"
           label="Email"
           placeholder="Your email..."
-          invalid={error}
+          invalid={Boolean(error)}
         />
         <Input
           id="password"
           label="Password"
           type={showPassword ? "text" : "password"}
           placeholder="******"
-          invalid={error}
+          invalid={Boolean(error)}
         />
         <p className="flex items-center gap-2 text-sm">
           <Button btnAction="read" type="button" onClick={handleShowPassword}>
@@ -82,4 +90,6 @@ export default function Login() {
       </p>
     </div>
   );
-}
+};
+
+export default Login;

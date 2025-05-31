@@ -1,7 +1,7 @@
 import { SwipeableDrawer } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../store/hooks";
 
 // CUSTOM HOOKS
 import { useAuth } from "../../hooks/useAuth";
@@ -12,9 +12,14 @@ import AddIcon from "@mui/icons-material/Add";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-export default function MenuDrawer({ open, toggle }) {
+type MenuDrawerProps = {
+  open: boolean;
+  toggle: (open: boolean) => void;
+};
+
+const MenuDrawer: React.FC<MenuDrawerProps> = ({ open, toggle }) => {
   const { handleLogout } = useAuth();
-  const token = useSelector((state) => state.user.token);
+  const token = useAppSelector((state) => state.user.token);
 
   const navLinkCss =
     "flex items-center gap-2 p-2 rounded-lg hover:gap-3 duration-200";
@@ -38,6 +43,7 @@ export default function MenuDrawer({ open, toggle }) {
   return (
     <SwipeableDrawer
       open={open}
+      onOpen={() => {}}
       onClose={() => toggle(false)}
       slotProps={{
         paper: {
@@ -76,4 +82,6 @@ export default function MenuDrawer({ open, toggle }) {
       </nav>
     </SwipeableDrawer>
   );
-}
+};
+
+export default MenuDrawer;

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function ErrorPage() {
+const ErrorPage: React.FC = () => {
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center bg-[#0C6291] text-white">
       <h1 className="text-9xl font-extrabold">404</h1>
@@ -12,4 +12,6 @@ export default function ErrorPage() {
       </h3>
     </div>
   );
-}
+};
+
+export default ErrorPage;

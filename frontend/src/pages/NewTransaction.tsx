@@ -2,7 +2,7 @@ import Button from "../components/UI/Button";
 import Input from "../components/UI/Input";
 
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { transactionsActions } from "../store/transactions";
 
 // CUSTOM HOOKS
@@ -16,14 +16,16 @@ import AddIcon from "@mui/icons-material/Add";
 import Select from "../components/UI/Select";
 
 export default function NewTransaction() {
-  const [responseMessages, setResponseMessages] = useState([]);
-  const dispatch = useDispatch();
-  const token = useSelector((state) => state.user.token);
-  const categories = useSelector((state) => state.transactions.categories);
+  const [responseMessages, setResponseMessages] = useState<
+    { type: string; field: string; description: string }[]
+  >([]);
+  const dispatch = useAppDispatch();
+  const token = useAppSelector((state) => state.user.token);
+  const categories = useAppSelector((state) => state.transactions.categories);
 
   const { form, handleChange, resetForm } = useForm();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     let errors = handleTransactionErrors(form);
 
@@ -34,7 +36,9 @@ export default function NewTransaction() {
 
     const response = await fetch("http://localhost:8080/api/expenses", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       credentials: "include",
       body: JSON.stringify({
         title: form.title,
