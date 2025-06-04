@@ -12,12 +12,19 @@ export const handleTransactionErrors = (transaction: {
       field: "title",
       description: "Title is required",
     });
-  if (transaction.value === null)
+  if (typeof transaction.value === "string" && transaction.value === "")
     errors.push({
       type: "error",
       field: "value",
       description: "Value is required",
     });
+  if (transaction.value <= 0) {
+    errors.push({
+      type: "error",
+      field: "value",
+      description: "Value must be greater than zero",
+    });
+  }
 
   return errors;
 };

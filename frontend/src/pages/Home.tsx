@@ -1,11 +1,11 @@
-import TransactionCard from "../components/TransactionCard";
+import TransactionCard from "../components/TransactionCard/TransactionCard";
 import TransactionDetailsDialog from "../components/TransactionDetailsDialog";
 import ConfirmDeletionDialog from "../components/ConfirmDeletionDialog";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { transactionsActions } from "../store/transactions";
 
-import type { FormType } from "../types/transactionTypes";
+import type { FormType, Transaction } from "../types/transactionTypes";
 
 import { ToastContainer, toast } from "react-toastify";
 
@@ -31,7 +31,7 @@ const Home: React.FC = () => {
         }),
       }
     );
-    const result = await response.json();
+    const result: Transaction = await response.json();
     if (response.ok) {
       dispatch(transactionsActions.updateTransaction(result));
       toast.success("Transaction updated successfully.");

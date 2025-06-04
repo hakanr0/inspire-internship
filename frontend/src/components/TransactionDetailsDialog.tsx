@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useAppSelector } from "../store/hooks";
 
 import type { FormType } from "../types/transactionTypes";
+import type { ResponseMessage } from "../types/messageTypes";
 
 // CUSTOM HOOKS
 import { useForm } from "../hooks/useForm";
@@ -20,20 +21,20 @@ import { handleTransactionErrors } from "../util/errors";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 
-type TransactionDetailsDialogProps = {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   onUpdate: (form: FormType) => void;
 };
 
-const TransactionDetailsDialog: React.FC<TransactionDetailsDialogProps> = ({
+const TransactionDetailsDialog: React.FC<Props> = ({
   isOpen,
   onClose,
   onUpdate,
 }) => {
-  const [responseMessages, setResponseMessages] = useState<
-    { type: string; field: string; description: string }[]
-  >([]);
+  const [responseMessages, setResponseMessages] = useState<ResponseMessage[]>(
+    []
+  );
   const { form, handleChange, resetForm } = useForm();
   const categories = useAppSelector((state) => state.transactions.categories);
 
@@ -53,6 +54,7 @@ const TransactionDetailsDialog: React.FC<TransactionDetailsDialogProps> = ({
 
     onUpdate(form);
     resetForm();
+    setResponseMessages([]);
     onClose();
   };
 
@@ -91,9 +93,13 @@ const TransactionDetailsDialog: React.FC<TransactionDetailsDialogProps> = ({
           value={form?.title}
           onChange={(e) => handleChange(e, "title")}
           placeholder="e.g. Uber Ride"
-          invalid={responseMessages?.some(
-            (r) => r.field === "title" && r.type === "error"
-          )}
+          isValid={
+            responseMessages?.some(
+              (r) => r.field === "title" && r.type === "error"
+            )
+              ? false
+              : undefined
+          }
         />
         <Select
           id="category"
@@ -109,9 +115,13 @@ const TransactionDetailsDialog: React.FC<TransactionDetailsDialogProps> = ({
           value={form?.value}
           onChange={(e) => handleChange(e, "value")}
           placeholder="e.g. $18"
-          invalid={responseMessages?.some(
-            (r) => r.field === "value" && r.type === "error"
-          )}
+          isValid={
+            responseMessages?.some(
+              (r) => r.field === "value" && r.type === "error"
+            )
+              ? false
+              : undefined
+          }
         />
         <div>
           <Button btnAction="update">

@@ -1,9 +1,9 @@
 import { NavLink } from "react-router-dom";
 
-import { useAppSelector } from "../../store/hooks";
+import { useAppSelector } from "../../../store/hooks";
 
 // CUSTOM HOOKS
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../../hooks/useAuth";
 
 // ICONS
 import HomeIcon from "@mui/icons-material/Home";

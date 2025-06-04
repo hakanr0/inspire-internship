@@ -1,5 +1,5 @@
 import Button from "../components/UI/Button";
-import SideNav from "../components/Layout/SideNav";
+import SideNav from "../components/Layout/SideNav/SideNav";
 import MenuDrawer from "../components/Drawers/MenuDrawer";
 
 import { useEffect, useState } from "react";
@@ -7,6 +7,8 @@ import { Outlet } from "react-router-dom";
 
 import { useAppDispatch } from "../store/hooks";
 import { transactionsActions } from "../store/transactions";
+
+import type { Category, Transaction } from "../types/transactionTypes";
 
 // CUSTOM HOOKS
 import { useAuth } from "../hooks/useAuth";
@@ -26,7 +28,7 @@ const Root: React.FC = () => {
 
   const fetchExpenses = async () => {
     const response = await fetch("http://localhost:8080/api/expenses");
-    const result = await response.json();
+    const result: Transaction[] = await response.json();
     dispatch(
       transactionsActions.setTransactions(
         [...result].sort(
@@ -39,7 +41,7 @@ const Root: React.FC = () => {
 
   const fetchCategories = async () => {
     const response = await fetch("http://localhost:8080/api/categories");
-    const result = await response.json();
+    const result: Category[] = await response.json();
     dispatch(transactionsActions.setCategories(result));
     setIsLoading(false);
   };

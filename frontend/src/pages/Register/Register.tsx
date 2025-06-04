@@ -1,26 +1,25 @@
-import Button from "../components/UI/Button";
-import Input from "../components/UI/Input";
+import Button from "../../components/UI/Button";
+import Input from "../../components/UI/Input";
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
+import type { ResponseMessage } from "../../types/messageTypes";
+
 // CUSTOM HOOKS
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 
 // ERROR HANDLER
-import { handleRegisterErrors } from "../util/errors";
+import { handleRegisterErrors } from "../../util/errors";
 
 // ICONS
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 
 export default function Register() {
   const { handleRegister } = useAuth();
-  const [responseMessage, setResponseMessage] = useState<{
-    type: string;
-    description: string;
-  }>();
+  const [responseMessage, setResponseMessage] = useState<ResponseMessage>();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -61,7 +60,7 @@ export default function Register() {
           id="email"
           label="Email"
           placeholder="johnwayne@example.com"
-          invalid={responseMessage?.type === "error"}
+          isValid={responseMessage?.type === "error" ? false : undefined}
         />
         <div className="flex gap-2">
           <Input
@@ -69,14 +68,14 @@ export default function Register() {
             label="Password"
             type="password"
             placeholder="******"
-            invalid={responseMessage?.type === "error"}
+            isValid={responseMessage?.type === "error" ? false : undefined}
           />
           <Input
             id="confirm-password"
             label="Confirm"
             type="password"
             placeholder="******"
-            invalid={responseMessage?.type === "error"}
+            isValid={responseMessage?.type === "error" ? false : undefined}
           />
         </div>
         {responseMessage && (
@@ -84,7 +83,7 @@ export default function Register() {
             {responseMessage.description}
           </p>
         )}
-        <Button btnAction="read">
+        <Button btnAction="read" data-testid="register-button">
           <HowToRegIcon fontSize="small" />
           Register
         </Button>

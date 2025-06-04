@@ -12,12 +12,12 @@ import AddIcon from "@mui/icons-material/Add";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-type MenuDrawerProps = {
+type Props = {
   open: boolean;
   toggle: (open: boolean) => void;
 };
 
-const MenuDrawer: React.FC<MenuDrawerProps> = ({ open, toggle }) => {
+const MenuDrawer: React.FC<Props> = ({ open, toggle }) => {
   const { handleLogout } = useAuth();
   const token = useAppSelector((state) => state.user.token);
 

@@ -1,14 +1,14 @@
-import Button from "../components/UI/Button";
-import Input from "../components/UI/Input";
+import Button from "../../components/UI/Button";
+import Input from "../../components/UI/Input";
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
 // CUSTOM HOOKS
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 
 // HANDLE ERRORS
-import { handleLoginErrors } from "../util/errors";
+import { handleLoginErrors } from "../../util/errors";
 
 // ICONS
 import LoginIcon from "@mui/icons-material/Login";
@@ -17,7 +17,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const Login: React.FC = () => {
   const { handleLogin } = useAuth();
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleShowPassword = () => {
@@ -57,14 +57,14 @@ const Login: React.FC = () => {
           id="email"
           label="Email"
           placeholder="Your email..."
-          invalid={Boolean(error)}
+          isValid={error !== "" ? Boolean(!error) : undefined}
         />
         <Input
           id="password"
           label="Password"
           type={showPassword ? "text" : "password"}
           placeholder="******"
-          invalid={Boolean(error)}
+          isValid={error !== "" ? Boolean(!error) : undefined}
         />
         <p className="flex items-center gap-2 text-sm">
           <Button btnAction="read" type="button" onClick={handleShowPassword}>
@@ -77,7 +77,7 @@ const Login: React.FC = () => {
           {showPassword ? "Hide Password" : "Show Password"}
         </p>
         {error && <p className="font-semibold text-red-600">{error}</p>}
-        <Button btnAction="read">
+        <Button btnAction="read" data-testid="login-button">
           <LoginIcon fontSize="small" />
           Login
         </Button>
