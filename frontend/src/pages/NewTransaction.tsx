@@ -5,6 +5,9 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { transactionsActions } from "../store/transactions";
 
+import type { Transaction } from "../types/transactionTypes";
+import type { ResponseMessage } from "../types/messageTypes";
+
 // CUSTOM HOOKS
 import { useForm } from "../hooks/useForm";
 
@@ -16,9 +19,10 @@ import AddIcon from "@mui/icons-material/Add";
 import Select from "../components/UI/Select";
 
 export default function NewTransaction() {
-  const [responseMessages, setResponseMessages] = useState<
-    { type: string; field: string; description: string }[]
-  >([]);
+  const [responseMessages, setResponseMessages] = useState<ResponseMessage[]>(
+    []
+  );
+
   const dispatch = useAppDispatch();
   const token = useAppSelector((state) => state.user.token);
   const categories = useAppSelector((state) => state.transactions.categories);
@@ -46,7 +50,7 @@ export default function NewTransaction() {
         categoryId: form.category,
       }),
     });
-    const result = await response.json();
+    const result: Transaction = await response.json();
 
     dispatch(transactionsActions.newTransaction(result));
     setResponseMessages([
@@ -70,12 +74,14 @@ export default function NewTransaction() {
         value={form?.title}
         onChange={(e) => handleChange(e, "title")}
         placeholder="e.g. Uber Ride"
-        invalid={responseMessages?.some(
-          (r) => r.field === "title" && r.type === "error"
-        )}
-        valid={responseMessages?.some(
-          (r) => r.field === "title" && r.type === "success"
-        )}
+        isValid={
+          responseMessages?.some((r) => r.field === "title")
+            ? responseMessages?.find((r) => r.field === "title")?.type ===
+              "success"
+              ? true
+              : false
+            : undefined
+        }
       />
       <Select
         id="category"
@@ -91,9 +97,13 @@ export default function NewTransaction() {
         value={form?.value}
         onChange={(e) => handleChange(e, "value")}
         placeholder="e.g. $18"
-        invalid={responseMessages?.some(
-          (r) => r.field === "value" && r.type === "error"
-        )}
+        isValid={
+          responseMessages?.some(
+            (r) => r.field === "value" && r.type === "error"
+          )
+            ? false
+            : undefined
+        }
       />
       <div>
         <Button btnAction="create">

@@ -1,30 +1,31 @@
-type InputProps = {
+type Props = {
   id: string;
   label: string;
-  invalid?: boolean;
-  valid?: boolean;
+  isValid?: boolean;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-const Input: React.FC<InputProps> = ({
-  id,
-  label,
-  invalid,
-  valid,
-  ...props
-}) => {
+const Input: React.FC<Props> = ({ id, label, isValid, ...props }) => {
   let cssClasses = "p-2 rounded-lg w-full ";
 
-  if (invalid) cssClasses += "bg-red-200";
-  if (valid) cssClasses += "bg-green-200";
-  if (!invalid && !valid) cssClasses += "bg-[#def2fc]";
+  switch (isValid) {
+    case undefined:
+      cssClasses += "bg-[#def2fc]";
+      break;
+    case true:
+      cssClasses += "bg-green-200";
+      break;
+    case false:
+      cssClasses += "bg-red-200";
+      break;
+  }
 
   return (
     <p className="flex flex-col gap-2 w-full">
       <label
         htmlFor={id}
-        className={`text-sm font-semibold ${invalid ? "text-red-600" : ""} ${
-          valid ? "text-green-600" : ""
-        }`}
+        className={`text-sm font-semibold ${
+          isValid === false ? "text-red-600" : ""
+        } ${isValid === true ? "text-green-600" : ""}`}
       >
         {label}
       </label>

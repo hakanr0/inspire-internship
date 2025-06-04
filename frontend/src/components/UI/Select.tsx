@@ -1,10 +1,10 @@
-type SelectProps = {
+type Props = {
   id: string;
   label: string;
   options: { id: number; name: string }[];
 } & React.SelectHTMLAttributes<HTMLSelectElement>;
 
-const Select: React.FC<SelectProps> = ({ id, label, options, ...props }) => {
+const Select: React.FC<Props> = ({ id, label, options, ...props }) => {
   return (
     <p className="flex flex-col gap-2 w-full">
       <label className="text-sm font-semibold">{label}</label>

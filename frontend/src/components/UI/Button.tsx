@@ -1,10 +1,10 @@
-type ButtonProps = {
+type Props = {
   btnAction: "create" | "read" | "update" | "delete" | "cancel" | "text-danger";
   children: React.ReactNode;
   className?: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-const Button: React.FC<ButtonProps> = ({
+const Button: React.FC<Props> = ({
   btnAction,
   children,
   className,

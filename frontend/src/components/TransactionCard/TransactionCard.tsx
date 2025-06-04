@@ -1,14 +1,14 @@
-import Button from "./UI/Button";
+import Button from "../UI/Button";
 
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { transactionsActions } from "../store/transactions";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { transactionsActions } from "../../store/transactions";
 
 // ICONS
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-type TransactionCardProps = {
+type Props = {
   id: number;
   title: string;
   categoryId: number;
@@ -17,7 +17,7 @@ type TransactionCardProps = {
   date: string;
 };
 
-const TransactionCard: React.FC<TransactionCardProps> = ({
+const TransactionCard: React.FC<Props> = ({
   id,
   title,
   categoryId,
@@ -56,6 +56,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
               btnAction="update"
               onClick={handleShowTransactionDetails}
               aria-label="edit transaction"
+              data-testid="edit-transaction-button"
             >
               <EditIcon fontSize="small" />
             </Button>
@@ -63,6 +64,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
               btnAction="delete"
               onClick={handleShowConfirmDeletion}
               aria-label="delete transaction"
+              data-testid="delete-transaction-button"
             >
               <DeleteIcon fontSize="small" />
             </Button>

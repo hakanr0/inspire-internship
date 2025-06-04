@@ -6,8 +6,8 @@ import NewTransaction from "./pages/NewTransaction";
 
 // AUTH
 import AuthRoot from "./pages/AuthRoot";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
 
 // ERROR PAGE
 import ErrorPage from "./pages/ErrorPage";
