@@ -10,19 +10,19 @@ export const handleTransactionErrors = (transaction: {
     errors.push({
       type: "error",
       field: "title",
-      description: "Title is required",
+      description: "Title is required.",
     });
   if (typeof transaction.value === "string" && transaction.value === "")
     errors.push({
       type: "error",
       field: "value",
-      description: "Value is required",
+      description: "Value is required.",
     });
   if (transaction.value <= 0) {
     errors.push({
       type: "error",
       field: "value",
-      description: "Value must be greater than zero",
+      description: "Value must be greater than zero.",
     });
   }
 
@@ -37,7 +37,7 @@ export const handleRegisterErrors = (user: {
   if (user.email.trim().length === 0) {
     return {
       type: "error",
-      description: "Email is required",
+      description: "Email is required.",
     };
   }
 
@@ -46,21 +46,21 @@ export const handleRegisterErrors = (user: {
   if (!isValid) {
     return {
       type: "error",
-      description: "Email is not valid",
+      description: "Email is not valid.",
     };
   }
 
   if (user.password.trim().length === 0) {
     return {
       type: "error",
-      description: "Password is required",
+      description: "Password is required.",
     };
   }
 
   if (user["password"] !== user["confirm-password"]) {
     return {
       type: "error",
-      description: "Passwords do not match",
+      description: "Passwords do not match.",
     };
   }
 
@@ -69,17 +69,17 @@ export const handleRegisterErrors = (user: {
 
 export const handleLoginErrors = (user: Credentials) => {
   if (user.email.trim().length === 0) {
-    return "Email is required";
+    return "Email is required.";
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const isValid = emailRegex.test(user.email);
   if (!isValid) {
-    return "Email is not valid";
+    return "Email is not valid.";
   }
 
   if (user.password.trim().length === 0) {
-    return "Password is required";
+    return "Password is required.";
   }
 
   return false;
