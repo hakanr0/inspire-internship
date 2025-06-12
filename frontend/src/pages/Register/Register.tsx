@@ -44,7 +44,6 @@ export default function Register() {
     if (result.type === "success") {
       toast.success(result.description);
       navigate("/auth");
-      // return;
     } else {
       setResponseMessage(result);
     }
@@ -78,11 +77,20 @@ export default function Register() {
             isValid={responseMessage?.type === "error" ? false : undefined}
           />
         </div>
-        {responseMessage && (
-          <p className={"font-semibold text-red-600"}>
-            {responseMessage.description}
-          </p>
-        )}
+        {responseMessage &&
+          (typeof responseMessage.description === "string" ? (
+            <p className={"font-semibold text-red-600"}>
+              {responseMessage.description}
+            </p>
+          ) : (
+            <div className="flex flex-col">
+              {responseMessage.description.map((d) => (
+                <p key={d} className={"font-semibold text-red-600"}>
+                  {d}
+                </p>
+              ))}
+            </div>
+          ))}
         <Button btnAction="read" data-testid="register-button">
           <HowToRegIcon fontSize="small" />
           Register

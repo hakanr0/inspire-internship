@@ -42,8 +42,8 @@ export default function NewTransaction() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      credentials: "include",
       body: JSON.stringify({
         title: form.title,
         value: form.value,

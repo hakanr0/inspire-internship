@@ -5,21 +5,29 @@ import { useNavigate } from "react-router-dom";
 
 import type { Credentials } from "../types/userTypes";
 
+type RegisterResponseMessage = {
+  code: string;
+  description: string;
+};
+
 export const useAuth = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleRegister = async (creds: Credentials) => {
-    const response = await fetch("http://localhost:8080/api/signup", {
+    const response = await fetch("http://localhost:8080/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(creds),
     });
     const result = await response.json();
     if (!response.ok) {
+      const errors = (result as RegisterResponseMessage[]).map(
+        (r) => r.description
+      );
       return {
         type: "error",
-        description: result.message,
+        description: errors,
       };
     } else {
       return { type: "success", description: "User created successfully" };
@@ -30,13 +38,13 @@ export const useAuth = () => {
     const response = await fetch("http://localhost:8080/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: "include",
       body: JSON.stringify(creds),
     });
     const result = await response.json();
     if (!response.ok) {
       return result;
     } else {
+      localStorage.setItem("token", result.token);
       dispatch(userActions.login(result.token));
       navigate("/");
       return;
@@ -44,26 +52,21 @@ export const useAuth = () => {
   };
 
   const handleLogout = async () => {
-    const response = await fetch("http://localhost:8080/api/logout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
-    if (response.ok) {
-      dispatch(userActions.logout());
-      navigate("/");
-    }
+    localStorage.removeItem("token");
+    dispatch(userActions.logout());
+    navigate("/");
   };
 
-  const isLoggedIn = async () => {
+  const isLoggedIn = async (token: string) => {
     const response = await fetch("http://localhost:8080/api/me", {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
-    const result = await response.json();
     if (response.ok) {
-      dispatch(userActions.login(result.token));
+      dispatch(userActions.login(token));
     }
   };
 

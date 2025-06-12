@@ -10,6 +10,7 @@ import type { FormType, Transaction } from "../types/transactionTypes";
 import { ToastContainer, toast } from "react-toastify";
 
 const Home: React.FC = () => {
+  const token = useAppSelector((state) => state.user.token);
   const { transactions, isViewingDetails, deleteConfirmation } = useAppSelector(
     (state) => state.transactions
   );
@@ -22,8 +23,8 @@ const Home: React.FC = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        credentials: "include",
         body: JSON.stringify({
           title: transaction.title,
           value: transaction.value,
@@ -45,8 +46,8 @@ const Home: React.FC = () => {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        credentials: "include",
       }
     );
     dispatch(

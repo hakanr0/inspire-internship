@@ -47,8 +47,9 @@ const Root: React.FC = () => {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     if (isLoading) {
-      isLoggedIn();
+      if (token) isLoggedIn(token);
       fetchExpenses();
       fetchCategories();
     }
