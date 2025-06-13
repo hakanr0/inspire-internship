@@ -34,7 +34,7 @@ describe("Register page", () => {
     });
     fireEvent.click(screen.getByTestId("register-button"));
 
-    expect(screen.getByText("Email is required")).toBeInTheDocument();
+    expect(screen.getByText("Email is required.")).toBeInTheDocument();
   });
 
   test("shows an error message when user enters an invalid email", () => {
@@ -43,7 +43,7 @@ describe("Register page", () => {
     });
     fireEvent.click(screen.getByTestId("register-button"));
 
-    expect(screen.getByText("Email is not valid")).toBeInTheDocument();
+    expect(screen.getByText("Email is not valid.")).toBeInTheDocument();
   });
 
   test("shows an error message when user leaves the Password field empty", () => {
@@ -55,7 +55,7 @@ describe("Register page", () => {
     });
     fireEvent.click(screen.getByTestId("register-button"));
 
-    expect(screen.getByText("Password is required")).toBeInTheDocument();
+    expect(screen.getByText("Password is required.")).toBeInTheDocument();
   });
 
   test("shows an error message when user enters mismatched passwords in Password and Confirm fields", () => {
@@ -70,7 +70,7 @@ describe("Register page", () => {
     });
     fireEvent.click(screen.getByTestId("register-button"));
 
-    expect(screen.getByText("Passwords do not match")).toBeInTheDocument();
+    expect(screen.getByText("Passwords do not match.")).toBeInTheDocument();
   });
 
   test("sends an API request on successful register", async () => {
