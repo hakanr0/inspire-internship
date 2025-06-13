@@ -41,7 +41,7 @@ describe("Login page", () => {
     });
     fireEvent.click(screen.getByTestId("login-button"));
 
-    expect(screen.getByText("Email is required")).toBeInTheDocument();
+    expect(screen.getByText("Email is required.")).toBeInTheDocument();
   });
 
   test("shows an error message when user enters an invalid email", () => {
@@ -50,7 +50,7 @@ describe("Login page", () => {
     });
     fireEvent.click(screen.getByTestId("login-button"));
 
-    expect(screen.getByText("Email is not valid")).toBeInTheDocument();
+    expect(screen.getByText("Email is not valid.")).toBeInTheDocument();
   });
 
   test("shows an error message when user leaves the Password field empty", () => {
@@ -62,7 +62,7 @@ describe("Login page", () => {
     });
     fireEvent.click(screen.getByTestId("login-button"));
 
-    expect(screen.getByText("Password is required")).toBeInTheDocument();
+    expect(screen.getByText("Password is required.")).toBeInTheDocument();
   });
 
   test("sends an API request on successful login", async () => {
