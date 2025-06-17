@@ -38,7 +38,7 @@ namespace transactions_api.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var result = await _expenseRepo.UpdateAsync(id, update);
-            if (result == null) return BadRequest("Expense with given ID does not exist.");
+            if (result == null) return NotFound("Expense with given ID does not exist.");
 
             return Ok(result);
         }
@@ -48,7 +48,7 @@ namespace transactions_api.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _expenseRepo.DeleteAsync(id);
-            if (result == null) return BadRequest("Expense with given ID does not exist.");
+            if (result == null) return NotFound("Expense with given ID does not exist.");
 
             return NoContent();
         }

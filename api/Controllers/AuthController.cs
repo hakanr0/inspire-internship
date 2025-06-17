@@ -51,17 +51,5 @@ namespace transactions_api.Controllers
 
             return Ok(new { message = "User created successfully." });
         }
-
-        [HttpGet("me")]
-        public async Task<IActionResult> Me()
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null) return Unauthorized();
-
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return NotFound();
-
-            return Ok();
-        }
     }
 }
