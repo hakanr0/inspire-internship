@@ -3,6 +3,8 @@ import { userActions } from "../store/user";
 
 import { useNavigate } from "react-router-dom";
 
+import { jwtDecode } from "jwt-decode";
+
 import type { Credentials } from "../types/userTypes";
 
 type RegisterResponseMessage = {
@@ -58,15 +60,17 @@ export const useAuth = () => {
   };
 
   const isLoggedIn = async (token: string) => {
-    const response = await fetch("http://localhost:8080/api/me", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      dispatch(userActions.login(token));
+    try {
+      const { exp } = jwtDecode<{ exp: number }>(token);
+      const expired = Math.floor(Date.now() / 1000) > exp;
+
+      if (expired) {
+        localStorage.removeItem("token");
+      } else {
+        dispatch(userActions.login(token));
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
