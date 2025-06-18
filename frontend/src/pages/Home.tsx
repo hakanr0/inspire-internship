@@ -10,7 +10,8 @@ import type { FormType, Transaction } from "../types/transactionTypes";
 import { ToastContainer, toast } from "react-toastify";
 
 const Home: React.FC = () => {
-  const token = useAppSelector((state) => state.user.token);
+  // const token = useAppSelector((state) => state.user.token);
+  const token = localStorage.getItem("token");
   const { transactions, isViewingDetails, deleteConfirmation } = useAppSelector(
     (state) => state.transactions
   );
