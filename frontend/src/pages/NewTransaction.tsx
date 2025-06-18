@@ -24,7 +24,8 @@ export default function NewTransaction() {
   );
 
   const dispatch = useAppDispatch();
-  const token = useAppSelector((state) => state.user.token);
+  // const token = useAppSelector((state) => state.user.token);
+  const token = localStorage.getItem("token");
   const categories = useAppSelector((state) => state.transactions.categories);
 
   const { form, handleChange, resetForm } = useForm();

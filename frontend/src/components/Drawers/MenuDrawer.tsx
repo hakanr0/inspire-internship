@@ -1,7 +1,7 @@
 import { SwipeableDrawer } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
-import { useAppSelector } from "../../store/hooks";
+// import { useAppSelector } from "../../store/hooks";
 
 // CUSTOM HOOKS
 import { useAuth } from "../../hooks/useAuth";
@@ -19,7 +19,8 @@ type Props = {
 
 const MenuDrawer: React.FC<Props> = ({ open, toggle }) => {
   const { handleLogout } = useAuth();
-  const token = useAppSelector((state) => state.user.token);
+  // const token = useAppSelector((state) => state.user.token);
+  const token = localStorage.getItem("token");
 
   const navLinkCss =
     "flex items-center gap-2 p-2 rounded-lg hover:gap-3 duration-200";
